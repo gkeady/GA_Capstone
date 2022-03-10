@@ -1,0 +1,134 @@
+Data Description for ygocardsbase.csv:
+
+NB This csv contains the master dataset created from the data collected via the API at https://db.ygoprodeck.com/api-guide/ , the features described here naturally will be relevant to all further dataframes created from this original.
+
+Features:
+
+name - the name of the individual card (these are quasi unique to each card with the only overlap being due to reprints of a card, however this master dataset does not currently separate cards by each printing)
+
+kind - The category of card that the card belongs to, broadly speaking cards belong to 3 main types(that can be further sub-divided):
+    
+    1.monsters - all cards with kind not spell or trap belong to a subcategory of monster (the two main ones being effect and normal)
+      1.1 effect:    
+            Effect Monster
+            XYZ Monster 
+            Tuner Monster
+            Fusion Monster
+            Synchro Monster
+            Synchro Tuner Monster
+            Link Monster
+            Pendulum Effect Fusion Monster
+            Synchro Pendulum Effect Monster
+            XYZ Pendulum Effect Monster
+            Pendulum Effect Monster
+            Flip Effect Monster
+            Ritual Effect Monster
+            Gemini Monster
+            Union Effect Monster
+            Spirit Monster
+            Toon Monster
+            Pendulum Tuner Effect Monster
+            Pendulum Flip Effect Monster
+      1.2 normal:
+            Normal Monster
+            Pendulum Normal Monster
+            Ritual Monster
+            Normal Tuner Monster
+            Token
+    2.spells
+            Spell Card 
+    3.traps
+            Trap Card  
+            
+NB any further subdivisions in these are not especially relevant to our modelling and only remain for the sake of preserving information in the dataset
+        
+attribute - all cards except spells and traps have attributes (however on those cards SPELL and TRAP are printed in the place of the attribute)
+    DARK      
+    EARTH     
+    LIGHT     
+    WATER      
+    WIND       
+    FIRE       
+    DIVINE
+    SPELL
+    TRAP
+
+type - the type of monster, spell or trap card
+    for monsters: 
+        Aqua
+        Beast
+        Beast-Warrior
+        Cyberse
+        Dinosaur
+        Divine-Beast
+        Dragon
+        Fairy
+        Fiend
+        Fish
+        Insect
+        Machine
+        Plant
+        Psychic
+        Pyro
+        Reptile
+        Rock
+        Sea Serpent
+        Spellcaster
+        Thunder
+        Warrior
+        Winged Beast      
+    for spells:
+        Normal
+        Field
+        Equip
+        Continuous
+        Quick-Play
+        Ritual       
+    for traps:
+        Normal
+        Continuous
+        Counter
+
+level - every monster except link monsters has a level between 0 and 13 (technically xyz have ranks rather than levels but for the purposes of this project it is fine to equate level to rank)
+
+card_text - the text printed on each card whether it is a description of the card or its effects
+
+effect_or_flavour_text - a binary indicator of whether the card_text describes an effect (1) or is just flavour text (0) (NB 0s are almost exclusively normal monsters)
+
+attack - the attack value printed on each monster card, for spells and traps it is recorded as None (NB for any card with a non-numeric attack e.g. ?, x000 the attack is recorded as 0)
+
+defence - the defence value printed on each monster card except link monsters, for spells and traps it is recorded as None
+
+pendulum_scale - a unique element exclusive to pendulum monsters, not useful for this project but kept for completeness in this dataset
+
+link_rating - a unique element exclusive to link monsters, not useful for this project but kept for completeness in this dataset
+
+link_markers - a unique element exclusive to link monsters, not useful for this project but kept for completeness in this dataset
+
+printings - the total number times the card has been printed
+
+sets - a list of the sets in which the card has been printed
+
+set_codes - a list of the unique identifying codes for the card corresponding to the sets it has been printed in
+
+set_rarities - a list of the rarities of the card's printings corresponding with each set code
+
+rarity_codes - the codes for the rarities in the corresponding set rarities entry
+
+total_views - the total number of times that the card's page has been viewed in the database at https://db.ygoprodeck.com/api-guide/
+
+views_past_week - the number of times that the card's page has been viewed in the database at https://db.ygoprodeck.com/api-guide/ in the past week (this data was retrieved 01/02/2022)
+
+lowest_price - the data retrieved via the API contains the lowest prices it can retrieve from several vendors for each card, this value is the lowest price retrieved by the API from tcgplayer and is the basic target variable (until the advanced pricing data is retrieved directly from tcgplayer's own API)
+
+release_date - the date the card was released into the TCG (the western side of the card game as cards are often released earlier in Asia (referred to as the OCG))
+
+staple - a binary indicator of whether the card is considered a staple (very playable in the actual game) by the community behind the API
+    0 - non-staple
+    1 - staple
+
+ban_status - an indicator of the card's current playability in the actual game (TCG banlist)
+    0 - the card is banned and not allowed in any competitive deck
+    1 - the card is limited and only 1 copy of it is allowed in any competitive deck
+    2 - the card is semi-limited and only 2 copies of it are allowed in any competitive deck
+    3 - the card is unlimited, the maximum 3 copies are playable
