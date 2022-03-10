@@ -59,3 +59,25 @@ The NLP itself was performed with a count vectorizer, this was chosen ahead of a
 ## Modelling
 
 The models run for this project start in the [Modelling notebook](Modelling/Models.ipynb) and the top performers among them are then optimised in the [Overview notebook](SummaryAndOverview/ExecutiveSummaryandOverview.ipynb). The data was split into training and testing data and then scaled using a standard scaler (the option of a minmax scaler is available in the overview notebook although running all the models with both scalers takes several days), these preparations are quite important because several models chosen only accept scaled data and the test score is the evaluation metric we are most interested in since we want to predict the prices for data that has not been seen before. Additionally, as might have already been apparent from the graphs above, unlike a standard linear regression problem the target data is not normally distributed, this makes building a predictive model from it very difficult and is why I started out by trying more than 20 different models, some of these were chosen simply because they are commonly used and others because they were the ones recommended when I researched models for non-normally distributed linear regression.
+
+The most successful models ended up being those that I chose specifically for this task and several of the ensemble models that tend to outperform standard models on irregular data due to running many submodels. In the end I moved into the optimisation stage with the Lars and Tweedie models from amongst the standard regression models, and the Bagging, Random Forest and Gradient Boosting ensemble regressors (also a dummy model was used to provide a baseline to compare these models with, although it really struggled to score well). The standard regression models used here work well for two different reasons, the Lars works well because it is designed for datasets with large numbers of features (something that the NLP produced a lot of) and the the Tweedie works well because rather than basing itself on the normal distribution it uses the Tweedie distribution which is very asymptotic just like the distribution of the target variable (NB that by default the Tweedie family of models use D^2 as their scoring metric rather than r^2 thus I have used sklearn's metrics package to calculate their r^2 scores and make them comparable).
+
+After applying gridsearches to this selection of models the best test scores they achieve (to 4 s.f.) are as follows:
+
+| Model  | Test Score (r^2 |
+| ------------- | ------------- |
+| Dummy  | -0.0001  |
+| Lars  | 0.1506  |
+| Tweedie  | 0.1510  |
+| Bagging  | 0.1597  |
+| Random Forest  | 0.1715  |
+| Gradient Boosting  | 0.1375  |
+
+Interestingly the gridsearch for several of these models was unable to produce a better result than the initial model likely because it focuses on optimising the cross validated score rather than the test score leading to the model overfitting the training data. Overall the results are not particularly big but do significantly outperform the woeful baseline score of -0.0001 which is a positive. Also almost all these models have certain rarities amongst their most significant features (specifically ultra rare - the most common high rarity - as one of the biggest price increases and common - the lowest rarity - as one of the biggest price decreases), the other feature that has significant influence on almost every model is the number of views the card has received recently. All these factors seem fairly logical indicators of value but it is clear that our data is held back by the limitations leading to assumptions on rarity earlier.
+
+## Conclusions
+
+Although the models produced can outperform the baseline significantly it is unlikely that they are usable in reality due to their low scores. Ideally in future the project would be rebuilt using data acquired directly from the TCGPlayer API that would remove some of the assumptions made for the dataset and also remove the resulting limitations. Further data available through that API that would also help the models includes card quality (e.g. mint) and even past sales data for cards allowing for some time series analysis. 
+
+Despite the limitations the project overall offers a very interesting dataset and challenge that expanded my abilities with several data cleaning and visualisation tools such as RegEx and word clouds, while also introducing me to many new models specifically designed to deal with the problems that real data sometimes presents. There is plenty of scope for future ideas with this dataset some based in obtaining additional data and then predicting new aspects such as whether a card belongs to an archetype or trying to map how cards can interact, other simpler options include trying to improve the NLP using custom stop words and a stemmer or even simply making the problem a classification one as to whether a card has a price above a certain value or not.
+
