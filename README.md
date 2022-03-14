@@ -64,7 +64,7 @@ The most successful models ended up being those that I chose specifically for th
 
 After applying gridsearches to this selection of models, the best test scores they achieve (to 4 s.f.) are as follows:
 
-| Model  | Test Score (r^2 |
+| Model  | Test Score (r^2) |
 | ------------- | ------------- |
 | Dummy  | -0.0001  |
 | Lars  | 0.1506  |
