@@ -26,15 +26,15 @@ In this section of the project, data cleaning was continued resulting in several
 
 During this process, it became apparent that the dataset was extremely skewed in shape:
 
-![Initial price distribution](SummaryAndOverview/histinitial.pdf)
+![Initial price distribution](SummaryAndOverview/targetinitial.png)
 
 As a result, I decided to use a mask on the dataset that removed any prices above $20. This threshold was chosen because it only removed 100 entries from the dataset while making the target variable much more usable. Although a more drastic threshold could have been chosen to make the data normally distributed (as well as techniques such as sampling), the intent of the project is to identify these outlier types of cards rather than predicting what might make a card tiny fractions of a financial unit more valuable.
 
-![New price distribution](SummaryAndOverview/histmask.pdf)
+![New price distribution](SummaryAndOverview/targetmasked.png)
 
 Further efforts involved resolving columns highly correlated with each other where possible (for example the number of times a card had been viewed in the database was extremely correlated with the number of views it had received in the past week), as well as simplifying some columns down (for example the “kind” column was simplified into a binary indicator if a card goes in the main or extra deck) and then dummifying the other categorical features. Ultimately the majority of decisions made followed the general sense of how the data was stored in the original database. What became apparent as the cleaning and EDA continued was that the data was very diverse containing masses of different features all having a small impact on the target variable, this is best demonstrated in this graphic which demonstrates just two of the 20+ features against the target variable:
 
-![Categorical Plot](SummaryAndOverview/categoricalplot.pdf)
+![Categorical Plot](SummaryAndOverview/catplot.png)
 
 The final piece of feature engineering was the most drastic carried out involving the rarities and printings of each card. Up to this point, I had still been hoping to be able to use the TCGPlayer API as it provides data for every printing of every card (making the dataset roughly 3 times larger) rather than the dataset that was used which only provides pricing data for the cheapest version available of each card. As a result, I had to assume that the cheapest printing of each card corresponded to its lowest rarity and then research all the rarities so that I could rank them from lowest to highest (unfortunately there is no absolute ranking for this). This all was done whilst keeping all the set codes and rarities synced for each card for potential future use. The assumptions made here are arguably the largest made in the entire project but there really does not seem a better approach than this at present. 
 
@@ -44,11 +44,11 @@ The last thing to do before starting to run models was to decide how to handle t
 
 In the dataset, there are two text features to consider. First, the name of each card (these names often define cards as part of an archetype) and secondly, the effect text of each card (Yu-Gi-Oh! uses PSCT (problem solving card text) a set of rules for making text logically interpretable). In theory, both these textual aspects should have the potential to work strongly with data science techniques. We can get an idea of each feature by examining word clouds created from them:
 
-![Name Cloud](SummaryAndOverview/namecloud.pdf)
+![Name Cloud](SummaryAndOverview/namecloud.png)
 
 Unsurprisingly, the name cloud is dominated by common words in card names such as “king”, “dragon” and “knight”, although it demonstrates the presence of archetypes well since HERO is very prominent in the cloud and one of the largest archetypes in the game (there are naturally also several dragon and knight archetypes as well).
 
-![Effect Cloud](SummaryAndOverview/textcloud.pdf)
+![Effect Cloud](SummaryAndOverview/textcloud.png)
 
 This cloud highlights several of the aspects of the game with “turn” being extremely prominent (unsurprising as the game is turn based) many effects being targeting effects (hence “target”), “special summon” being a fairly powerful common effect and most major areas that cards can be also featuring (“graveyard”/”GY”, “hand”, “field”, “deck”).
 
